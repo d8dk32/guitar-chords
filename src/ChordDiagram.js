@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { determineNoteLetters, determineFretNumbers } from './ChordCalculator.js';
+
 
 class ChordDiagram extends Component {
 
@@ -17,85 +19,45 @@ class ChordDiagram extends Component {
         note6fret: 1
     };
 
-    notesInOrder = ['Ab','A','Bb','B','C','Db','D','Eb','E','F','Gb','G','Ab','A','Bb','B','C','Db','D','Eb','E','F','Gb','G'];
-    
-    getCircleX = (note) => {
-        var fret = this.state['note'+ note +'fret'];
-        if (fret < 0)
-            return -20;
-        return 10 + 64*fret;
-    };
+    updateChordDiagram = (fretNums) => {
+        this.setState(state=>({
+            note1string: 1,
+            note1fret: fretNums[0],
+            note2string: 2,
+            note2fret: fretNums[1],
+            note3string: 3,
+            note3fret: fretNums[2],
+            note4string: 4,
+            note4fret: fretNums[3],
+            note5string: 5, 
+            note5fret: fretNums[4],
+            note6string: 6,
+            note6fret: fretNums[5]
+        }));
+    }
 
-    getCircleY = (note) => {
-        var string = this.state['note'+ note +'string'];
-        if (string < 1 || string > 6)
-            return -20;
-        return 28*string;
-    };
-
-    determineNotesInChord = () => {
+    determineFingering = () => {
         //figure out the letter notes that belong in this chord
         const { rootNote } = this.props;
         const { chordType } = this.props;
 
-        var rootIndex = this.notesInOrder.indexOf(rootNote);
-        var noteLetters = [rootNote];
+        var noteLetters = determineNoteLetters(rootNote,chordType);
+        var fretNums = determineFretNumbers(noteLetters);
+        return fretNums;
+    };
 
-        if (chordType==='maj')
-        {
-            noteLetters.push(this.notesInOrder[rootIndex+4]); //3rd
-            noteLetters.push(this.notesInOrder[rootIndex+7]); //5th
-        }
-        else if (chordType==='min')
-        {
-            noteLetters.push(this.notesInOrder[rootIndex+3]);
-            noteLetters.push(this.notesInOrder[rootIndex+7]);
-        }
-        else if (chordType==='dim')
-        {
-            noteLetters.push(this.notesInOrder[rootIndex+3]);
-            noteLetters.push(this.notesInOrder[rootIndex+6]);
-        }
-        else if (chordType==='+')
-        {
-            noteLetters.push(this.notesInOrder[rootIndex+5]);
-            noteLetters.push(this.notesInOrder[rootIndex+8]);
-        }
-        else if (chordType==='min')
-        {
-            noteLetters.push(this.notesInOrder[rootIndex+3]);
-            noteLetters.push(this.notesInOrder[rootIndex+7]);
-        }
-        else if (chordType==='7')
-        {
-            noteLetters.push(this.notesInOrder[rootIndex+4]);
-            noteLetters.push(this.notesInOrder[rootIndex+7]);
-            noteLetters.push(this.notesInOrder[rootIndex+10]);
-        }
-        else if (chordType==='7')
-        {
-            noteLetters.push(this.notesInOrder[rootIndex+4]);
-            noteLetters.push(this.notesInOrder[rootIndex+7]);
-            noteLetters.push(this.notesInOrder[rootIndex+10]);
-        }
-        else if (chordType==='maj7')
-        {
-            noteLetters.push(this.notesInOrder[rootIndex+4]);
-            noteLetters.push(this.notesInOrder[rootIndex+7]);
-            noteLetters.push(this.notesInOrder[rootIndex+11]);
-        }
-        else if (chordType==='m7')
-        {
-            noteLetters.push(this.notesInOrder[rootIndex+3]);
-            noteLetters.push(this.notesInOrder[rootIndex+7]);
-            noteLetters.push(this.notesInOrder[rootIndex+10]);
-        }
+    getCircleX = (string) => {
+        var finger = this.determineFingering();
+        if (string < 0)
+            return -20;
+        return 10 + 64*finger[string];
+    };
 
-        console.log(noteLetters);
+    getCircleY = (string) => {
+        return 28+28*string;
     };
 
     render() {
-        this.determineNotesInChord();
         return (
 
         <div>
@@ -123,12 +85,12 @@ class ChordDiagram extends Component {
                 <line x1="0" y1="140" x2="820" y2="140" stroke="black" />
                 <line x1="0" y1="168" x2="820" y2="168" stroke="black" />
                 
+                <circle cx={this.getCircleX('0')} cy={this.getCircleY('0')} r="10" fill="brown"/>
                 <circle cx={this.getCircleX('1')} cy={this.getCircleY('1')} r="10" fill="brown"/>
                 <circle cx={this.getCircleX('2')} cy={this.getCircleY('2')} r="10" fill="brown"/>
                 <circle cx={this.getCircleX('3')} cy={this.getCircleY('3')} r="10" fill="brown"/>
                 <circle cx={this.getCircleX('4')} cy={this.getCircleY('4')} r="10" fill="brown"/>
                 <circle cx={this.getCircleX('5')} cy={this.getCircleY('5')} r="10" fill="brown"/>
-                <circle cx={this.getCircleX('6')} cy={this.getCircleY('6')} r="10" fill="brown"/>
 
             </svg> 
         </div>
