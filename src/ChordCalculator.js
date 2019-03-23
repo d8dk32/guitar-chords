@@ -71,4 +71,91 @@ function determineFretNumbers(noteLetters) { //note letters should be an array o
     return fretNums;
 };
 
-export { determineNoteLetters, determineFretNumbers };
+function determineFretNumbersV2(noteLetters) {
+    var fretNums = [-1,-1,-1,-1,-1,-1];
+    //assign root note
+    const nbs = notesByString;
+    var rootString = 5; //actually the 6th string
+    var rootFret = nbs[5].indexOf(noteLetters[0]);
+    if (rootFret < 9)
+        fretNums[5] = rootFret;
+    else 
+    {
+        rootFret = nbs[4].indexOf(noteLetters[0]);
+        fretNums[4] = rootFret;
+        rootString = 4; //actually the 5th string
+    }
+    
+    //assign the remaining notes from the top down
+    if (noteLetters[3] !== undefined) //start with the 7th if it exists
+    {
+        var noteAssigned = false;
+        var checkString = rootString-1;
+        while (!noteAssigned) 
+        {
+            var extFret = nbs[checkString].indexOf(noteLetters[3]);
+            if (extFret - rootFret > -1 && extFret - rootFret < 4) 
+            {
+                noteAssigned = true;
+                fretNums[checkString] = extFret;
+            }
+            else 
+            {
+                checkString -= 1;
+                if(checkString < 0)
+                    noteAssigned = true;
+                
+            }
+        }
+    }
+    if (noteLetters[2] !== undefined) //start with the 7th if it exists
+    {
+        var noteAssigned = false;
+        var checkString = rootString-1;
+        while (!noteAssigned) 
+        {
+            var extFret = nbs[checkString].indexOf(noteLetters[2]);
+            if (extFret - rootFret > -1 && extFret - rootFret < 4) 
+            {
+                noteAssigned = true;
+                fretNums[checkString] = extFret;
+            }
+            else 
+            {
+                checkString -= 1;
+                if(checkString < 0)
+                    noteAssigned = true;
+                
+            }
+        }
+        
+    }
+    if (noteLetters[1] !== undefined) //start with the 7th if it exists
+    {
+        var noteAssigned = false;
+        var checkString = rootString-1;
+        while (!noteAssigned) 
+        {
+            var extFret = nbs[checkString].indexOf(noteLetters[1]);
+            if (extFret - rootFret > -1 && extFret - rootFret < 4) 
+            {
+                noteAssigned = true;
+                fretNums[checkString] = extFret;
+            }
+            else 
+            {
+                checkString -= 1;
+                if(checkString < 0)
+                    noteAssigned = true;
+                
+            }
+        }
+    }
+    //try to add octave
+    if ( fretNums[rootString-2] === -1)
+        fretNums[rootString-2] = rootFret+2;
+
+    return fretNums;
+}
+
+export { determineNoteLetters, determineFretNumbers, determineFretNumbersV2 };

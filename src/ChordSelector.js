@@ -31,9 +31,7 @@ class ChordSelector extends Component {
     render() {
       return (
         <div>
-          <p style={{margin: '5px'}}>Selected Chord: {this.state.rootNote + 
-                                      (this.state.chordType !== 'maj' ? this.state.chordType : '')}
-          </p>
+          <br/>          
           <div  align="left">
             <Button  id='Ab' label='Ab' onClick={()=>this.handleRootSelection('Ab')} style={{margin: '2px'}}/>
             <Button id='A' label='A' onClick={()=>this.handleRootSelection('A')} style={{margin: '2px'}}/>
@@ -59,6 +57,9 @@ class ChordSelector extends Component {
             <Button id='m7' label={this.state.rootNote+'m7'} onClick={()=>this.handleTypeSelection('m7')} style={{margin: '2px'}}/>
           </div>
           <br/>
+          <h3 style={{margin: '5px'}}>{this.state.rootNote + ' ' +
+                                      (this.state.chordType !== 'maj' ? this.state.chordType : '')}
+          </h3>
           <ChordDiagram rootNote={this.state.rootNote} chordType={this.state.chordType}/>
         </div>
       );

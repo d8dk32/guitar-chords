@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { determineNoteLetters, determineFretNumbers } from './ChordCalculator.js';
-
+import { determineNoteLetters, determineFretNumbers, determineFretNumbersV2 } from './ChordCalculator.js';
 
 class ChordDiagram extends Component {
 
@@ -42,7 +41,7 @@ class ChordDiagram extends Component {
         const { chordType } = this.props;
 
         var noteLetters = determineNoteLetters(rootNote,chordType);
-        var fretNums = determineFretNumbers(noteLetters);
+        var fretNums = determineFretNumbersV2(noteLetters);
         return fretNums;
     };
 
